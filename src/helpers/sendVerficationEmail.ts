@@ -27,10 +27,7 @@ export async function sendVerificationEmail(
             success: false,
             message: 'Error sending Verification Email'
 
-
-
         }
-
     }
 }
 

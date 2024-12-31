@@ -46,10 +46,21 @@ export default {
         async jwt(token, user) {
             if (user) {
                 token._id = user._id?.toString()
+                token.username = user.username
+                token.isVerified = user.isVerified
+                token.isAcceptingMessages = user.isAcceptingMessages
             }
+
             return token
         },
         async session(session, token) {
+            if(token) {
+                session.user._id = token._id
+                session.user.username = token.username
+                session.user.isVerified = token.isVerified
+                session.user.isAcceptingMessages = token.isAcceptingMessages
+            }
+
             return session
         }
     }

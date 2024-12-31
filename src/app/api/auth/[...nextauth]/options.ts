@@ -4,8 +4,9 @@ import dbConnect from "@/util/dbConnect";
 import User from "@/model/User";
 import UserModel from "@/model/User";
 import { signIn } from "next-auth/react";
+import { NextAuthOptions } from "next-auth";
 
-export default {
+export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             id: "credentials",
@@ -71,3 +72,4 @@ export default {
         strategy: "jwt",
     },
     secret: process.env.NEXTAUTH_SECRET,
+}

@@ -24,7 +24,27 @@ export default async function POST(request: Request) {
             const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
             if (existingUserByEmail) {
-                true // TODO: Send verification email to existing user
+                if (existingUserByEmail.isVerified) {
+                    return Response.json({
+                        success: false,
+                        message: "Email already exists"
+                    }, { status: 400 })
+                } else {
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    const verifyCodeExpiry = new Date();
+                    verifyCodeExpiry.setHours(verifyCodeExpiry.getHours() + 1);
+
+                    existingUserByEmail.verifyCode = verifyCode;
+                    existingUserByEmail.verifyCodeExpiry = verifyCodeExpiry;
+                    existingUserByEmail.password = hashedPassword;
+
+                    await existingUserByEmail.save();
+
+                    return Response.json({
+                        success: true,
+                        message: "User registered successfully please verify your email address"
+                    }, { status: 201 })
+                }
             } else {
                 const hashedPassword = await bcrypt.hash(password, 10);
                 const verifyCodeExpiry = new Date();

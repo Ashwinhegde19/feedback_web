@@ -40,10 +40,6 @@ export default async function POST(request: Request) {
 
                     await existingUserByEmail.save();
 
-                    return Response.json({
-                        success: true,
-                        message: "User registered successfully please verify your email address"
-                    }, { status: 201 })
                 }
             } else {
                 const hashedPassword = await bcrypt.hash(password, 10);
@@ -78,7 +74,7 @@ export default async function POST(request: Request) {
                 success: true,
                 message: "User registered successfully please verify your email address"
             }, { status: 201 })
-
+            Fixed Unreachable Code
         } catch (error) {
             console.error("Error registering user: ", error);
             return Response.json(

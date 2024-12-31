@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import dbConnect from "@/util/dbConnect";
 import User from "@/model/User";
 import UserModel from "@/model/User";
+import { signIn } from "next-auth/react";
 
 export default {
     providers: [
@@ -40,5 +41,22 @@ export default {
                 }
             }
         })
-    ]
-}
+    ],
+    callbacks: {
+        async jwt(token, user) {
+            if (user) {
+                token._id = user._id?.toString()
+            }
+            return token
+        },
+        async session(session, token) {
+            return session
+        }
+    }
+    pages: {
+        signIn: "/sign-in",
+    },
+    session: {
+        strategy: "jwt",
+    },
+    secret: process.env.NEXTAUTH_SECRET,
